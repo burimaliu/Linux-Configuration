@@ -154,6 +154,7 @@ from __init__ import app as application
 
 ### (Optional) Application availability status
 - Create a vhost `sudo nano /etc/apache2/mods-available/status.conf`
+- Copy configuration:
 ```
 <Location /server-status>
 	SetHandler server-status
@@ -163,5 +164,5 @@ from __init__ import app as application
 	Allow from YOUR-IP
 </Location>
 ```
-- `sudo apache2 restart`
+- Restart apache `sudo apache2 restart`
 - Browse YOUR-IP/server-status
