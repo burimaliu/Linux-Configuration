@@ -25,8 +25,22 @@ Copy the `/root/.ssh/authorized_keys` file to `/home/grader/.ssh/` directory
 - `chmod 600 authorized_keys`
 - `chown grader authorized_keys`
 
+### DISABLE root remote login
+- Set `permitRootLogin` in `/etc/ssh/sshd_config` to `no`
+- Add a new line with `AllowUsers grader`
+- restart ssh
+
 ### UPDATE all packages
 `apt-get update`
+
+### Setup Automatic Updates
+- `sudo apt-get install unattended-upgrades` Install's `unattended-upgrades` package
+- `sudo dpkg-reconfigure unattended-upgrades` Select `Yes`
+```
+This package can download and install security upgrades automatically
+and unattended, taking care to only install packages from the
+configured APT source
+```
 
 ### RUN ssh daemon on port 2200:
 - Set 'Port' in /etc/ssh/sshd_config to '2200'
@@ -46,6 +60,13 @@ Port 2200
 - `sudo ufw enable`
 - check the active rules:
 - `sudo ufw status verbose`
+
+### (Optional) Install Fail2Ban to protect from bruteforce attacks
+- `sudo apt-get install fail2ban`
+- `sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local`
+-  (Optional) update configuration here: `sudo nano /etc/fail2ban/jail.local`
+-  Start it `sudo service fail2ban start` 
+
 
 ### INSTALL webserver and WSGI
 - install Apache 2
@@ -130,3 +151,18 @@ from __init__ import app as application
 ```
 ### Restart web server
 - `sudo service apache2 restart`
+
+### (Optional) Application availability status
+- Create a vhost `sudo nano /etc/apache2/mods-available/status.conf`
+- 
+```
+<Location /server-status>
+	SetHandler server-status
+	Order deny,allow
+	Deny from all
+	Allow from 127.0.0.1 ::1
+	Allow from YOUR-IP
+</Location>
+```
+- `sudo apache2 restart`
+- Browse YOUR-IP/server-status
