@@ -1,2 +1,122 @@
-# Linux-Configuration
-Linux Configuration
+# Linux Configuration
+
+## Configure and setup python application
+
+### About server
+- IP `52.25.17.138`
+- Port `2200`
+- Online Application http://52.25.17.138/
+
+### Add user / add to sudo group
+
+Add a user grader
+`adduser grader`
+
+Add the user to the sudo group
+`adduser grader sudo`
+
+### UPDATE all packages
+`apt-get update`
+
+### RUN ssh daemon on port 2200:
+- Set 'Port' in /etc/ssh/sshd_config to '2200'
+Port 2200
+- Restart the ssh daemon
+- restart ssh
+
+### SET local time to UTC
+`dpkg-reconfigure tzdata`
+- select 'Others' or 'None of the above'
+- select 'UTC' 
+
+### ENABLE universal firewall for given ports
+- sudo ufw allow 2200
+- sudo ufw allow 80
+- sudo ufw allow 123
+- `sudo ufw enable`
+- check the active rules:
+- `sudo ufw status verbose`
+
+### INSTALL webserver and WSGI
+- install Apache 2
+- `sudo apt-get install apache2`
+- #### you can check now your Apache server working at http://THE.VM.IP.NUMBER
+- install mod_wsgi
+- `sudo apt-get install python-setuptools libapache2-mod-wsgi python-dev`
+- `sudo service apache2 restart`
+- #### Check if wsgi is enabled
+- `sudo a2enmod wsgi `
+
+### INSTALL POSTgre
+- #### install the package
+- `sudo apt-get install postgresql`
+- #### check if service is running
+- `sudo service postgresql status`
+
+### POSTgre management
+- login as postgres user into psql to have administrative rights on the database
+- `su - postgres`
+- `psql`
+- `CREATE DATABASE catalog;`
+- `CREATE USER catalog PASSWORD 'somepwd';`
+- `GRANT ALL ON DATABASE catalog TO catalog;`
+
+### INSTALL git
+- `sudo apt-get install git`
+
+### CLONE the app from GIT
+- `cd /var/www/FlaskAapp/FlaskApp/ItemCatalog`
+- `sudo git clone https://github.com/burimaliu/Item-Catalog.git`
+
+### Install PSYCOPG2
+- #### substitute X.X with your POSTgre version
+- `sudo apt-get install postgresql-server-dev-X.X`
+- `sudo pip install psycopg2==2.6`
+
+### RUN flask
+- `cd /var/www/FlaskAapp/FlaskApp/ItemCatalog`
+### install dependencies
+- `sudo sh pg_config.sh`
+### edit configuration file
+- ` sudo nano init.sh` - Update database details
+### Apply new configuration
+- `sudo sh init.sh`
+- rename `application.py` to `__init__.py`
+
+### create apache vhost
+- `nano /etc/apache2/sites-available/FlaskApp.conf`
+
+```
+<VirtualHost *:80>
+ServerName IP
+ServerAdmin admin@IP
+WSGIScriptAlias / /var/www/FlaskApp/FlaskApp/ItemCatalog/flaskapp.wsgi
+<Directory /var/www/FlaskApp/FlaskApp/ItemCatalog/>
+#WSGIApplicationGroup %{GLOBAL}
+Order deny,allow
+Allow from all
+<Files flaskapp.wsgi>
+Require all granted
+</Files>
+</Directory>
+ErrorLog ${APACHE_LOG_DIR}/error.log
+LogLevel warn
+CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+
+### Create wsgi file
+- `nano /var/www/FlaskApp/FlaskApp/ItemCatalog/flaskapp.wsgi`
+
+```
+#!/usr/bin/python
+import os
+import sys
+import logging
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0,"/var/www/FlaskApp/FlaskApp/ItemCatalog/")
+from __init__ import app as application
+#application.secret_key = 'Add your secret key'
+```
+### Restart web server
+- `sudo service apache2 restart`
