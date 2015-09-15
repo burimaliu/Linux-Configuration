@@ -30,9 +30,9 @@ Port 2200
 - select 'UTC' 
 
 ### ENABLE universal firewall for given ports
-- sudo ufw allow 2200
-- sudo ufw allow 80
-- sudo ufw allow 123
+- `sudo ufw allow 2200`
+- `sudo ufw allow 80`
+- `sudo ufw allow 123`
 - `sudo ufw enable`
 - check the active rules:
 - `sudo ufw status verbose`
