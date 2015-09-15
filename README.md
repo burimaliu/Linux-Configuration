@@ -77,8 +77,8 @@ Port 2200
 - `cd /var/www/FlaskAapp/FlaskApp/ItemCatalog`
 ### install dependencies
 - `sudo sh pg_config.sh`
-### edit configuration file
-- ` sudo nano init.sh` - Update database details
+### edit configuration file and update database configuration 
+- ` sudo nano init.sh`
 ### Apply new configuration
 - `sudo sh init.sh`
 - rename `application.py` to `__init__.py`
