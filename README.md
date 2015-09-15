@@ -75,11 +75,11 @@ Port 2200
 
 ### RUN flask
 - `cd /var/www/FlaskAapp/FlaskApp/ItemCatalog`
-### install dependencies
+- #### install dependencies
 - `sudo sh pg_config.sh`
-### edit configuration file and update database configuration 
+- #### edit configuration file and update database configuration 
 - ` sudo nano init.sh`
-### Apply new configuration
+- #### Apply new configuration
 - `sudo sh init.sh`
 - rename `application.py` to `__init__.py`
 
