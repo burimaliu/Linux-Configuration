@@ -15,6 +15,16 @@ Add a user grader
 Add the user to the sudo group
 `adduser grader sudo`
 
+Create a directory `.ssh` inside `/home/grader/`
+`mkdir /home/grader/.ssh`
+`chown grader /home/grader/.ssh`
+`chmod 700 /home/grader/.ssh`
+
+Copy the `/root/.ssh/authorized_keys` file to `/home/grader/.ssh/` directory
+`cp /root/.ssh/authorized_keys /home/grader/.ssh/`
+`chmod 600 authorized_keys`
+`chown grader authorized_keys`
+
 ### UPDATE all packages
 `apt-get update`
 
