@@ -154,7 +154,6 @@ from __init__ import app as application
 
 ### (Optional) Application availability status
 - Create a vhost `sudo nano /etc/apache2/mods-available/status.conf`
-- 
 ```
 <Location /server-status>
 	SetHandler server-status
